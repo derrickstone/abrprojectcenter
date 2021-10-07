@@ -6,7 +6,7 @@
 
 	<Cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select * from form where 0 =1
 	</cfquery>
 	
@@ -17,7 +17,7 @@
 
 	<cfset var qget =  "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	 select o.organizationname, o.organizationid, uo.accesslevel from organization o
 	 inner join usrorganization uo on uo.organization = o.organizationid
 	 where uo.usr = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.usrid#">
@@ -30,7 +30,7 @@
 <cffunction name="getSuperUsrs" output="false">
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select *, usrid as id, usrname as name from usr where accesslevel = 1
 	</cfquery>
 	<cfreturn qget>
@@ -38,7 +38,7 @@
 <cffunction name="getUsr" output="false">
 	<cfargument name="usrid">
 	<cfset var qget = "">
-	<cfquery name="qget" datasource="#application.dsn#" cachedwithin="#createtimespan(0,1,0,0)#">
+	<cfquery name="qget"  cachedwithin="#createtimespan(0,1,0,0)#">
 		select * from usr where usrid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.usrid#">
 	</cfquery>
 
@@ -47,7 +47,7 @@
 <cffunction name="getUsrIdFromEmail" output="false">
 	<cfargument name="email">
 	<cfset var qget = "">
-	<cfquery name="qget" datasource="#application.dsn#" cachedwithin="#createtimespan(0,1,0,0)#">
+	<cfquery name="qget"  cachedwithin="#createtimespan(0,1,0,0)#">
 		select usrid from usr where lower(email) = lower(<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.email#">)
 	</cfquery>
 
@@ -65,13 +65,13 @@
 	<cfset var qvalidate = "">
 	<Cfset var oUser=structnew()>
 
-	<cfquery name="qvalidate" datasource="#application.dsn#">
+	<cfquery name="qvalidate" >
 		select * from usrtoken where usrname=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.usrname#"> and token = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.token#">
 	</cfquery>
 
 	<cfif qvalidate.recordcount>
 
-		<cfquery name="qget" datasource="#application.dsn#">
+		<cfquery name="qget" >
 			select * from usr where usrname = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.usrname#">
 			
 		</cfquery>
@@ -142,19 +142,19 @@
 	<cfif qFindUsr1.recordcount neq 0>
 		<!--- update user record here 
 			this is a new user to the system--->
-		<cfquery name="qUpdateUsr" datasource="#application.dsn#">
+		<cfquery name="qUpdateUsr" >
 		update usr set firstname = <cfqueryparam cfsqltype="cf_sql_varchar" value="#returnHeaders.givenName#">, lastname=<cfqueryparam cfsqltype="cf_sql_varchar" value="#returnHeaders.sn#">, email=<cfqueryparam cfsqltype="cf_sql_varchar" value="#returnHeaders.mail#">, sisid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#returnHeaders.employeeNumber#">
 		 where usrname = <cfqueryparam cfsqltype="cf_sql_varchar" value="#returnHeaders.remote_user#">
 		</cfquery>
 		
 	<cfelse>
 		<!--- create a usr record from the saml information --->
-		<cfquery name="qAddUsr" datasource="#application.dsn#">
+		<cfquery name="qAddUsr" >
 		insert into usr ( firstname, lastname, usrname, accesslevel, email, sisid ) values ( <cfqueryparam cfsqltype="cf_sql_varchar" value="#returnHeaders.givenName#">, <cfqueryparam cfsqltype="cf_sql_varchar" value="#returnHeaders.sn#">, <cfqueryparam cfsqltype="cf_sql_varchar" value="#returnHeaders.remote_user#">, 4, <cfqueryparam cfsqltype="cf_sql_varchar" value="#returnHeaders.mail#">, <cfqueryparam cfsqltype="cf_sql_varchar" value="#returnHeaders.employeeNumber#"> )
 		</cfquery>
 	</cfif>
 
-	<cfquery name="qCreateToken" datasource="#application.dsn#">
+	<cfquery name="qCreateToken" >
 		insert into usrtoken ( usrname, token ) values ( <cfqueryparam cfsqltype="cf_sql_varchar" value="#returnHeaders.remote_user#">, <Cfqueryparam cfsqltype="cf_sql_varchar" value="#token#"> ) 
 		</cfquery>
 
