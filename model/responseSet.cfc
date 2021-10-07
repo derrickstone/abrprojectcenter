@@ -15,7 +15,7 @@
 		Error! Invalid ID<cfabort>
 	</cfif>
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select * from responsedata where responseset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#"> and length(filepath) > 0
 	</cfquery>
 	<cfif qget.recordcount>
@@ -30,22 +30,22 @@
 		</cfloop>
 	</cfif>
 
-	<cfquery name="qget2" datasource="#application.dsn#">
+	<cfquery name="qget2" >
 	select responsedataid from responsedata where responseset = #arguments.id#
 	</cfquery>
 	<!--- STUB: should this be un-deletable? --->
-	<cfquery name="qdel1" datasource="#application.dsn#">
+	<cfquery name="qdel1" >
 	delete from responsedata where responseset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
 	<cfif qget2.recordcount>
-		<cfquery name="qdel3" datasource="#application.dsn#">
+		<cfquery name="qdel3" >
 		delete from review where responsedata in ( <cfqueryparam cfsqltype="cf_sql_integer" value="#valuelist(qget2.responsedataid)#" list="true"> )
 		</cfquery>
 	</cfif>
-	<cfquery name="qdel2" datasource="#application.dsn#">
+	<cfquery name="qdel2" >
 	delete from responseset where responsesetid =  <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
-	<cfquery name="qdel4" datasource="#application.dsn#">
+	<cfquery name="qdel4" >
 	delete from adhoc where responseset =  <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
 	<!--- STUB: we should also delete attached files --->
@@ -57,7 +57,7 @@
 
 	<Cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select keyusroptiondata.usr
 	from keyusroptiondata inner join responsedata on keyusroptiondata.optiondata = responsedata.numericresponse
 	inner join formfield on formfield.formfieldid = responsedata.formfield
@@ -76,7 +76,7 @@
 
 	<!--- get all approval steps for the form, and all the usrids --->
 	<!---
-	<Cfquery name="qget" datasource="#application.dsn#">
+	<Cfquery name="qget" >
 
 
 	</Cfquery>
@@ -93,7 +93,7 @@
 	<cfargument name="sortOrder" default="">
 
 	<cfset var qget = "">
-	<Cfquery name="qget" datasource="#application.dsn#">
+	<Cfquery name="qget" >
 		select responsesetid, responsesetid as id, form
 		<cfif len(arguments.lAdditionalFields)>, #arguments.lAdditionalFields#</cfif>
 		from responseset
@@ -118,7 +118,7 @@
 
 	<!--- for security sake, we include the form id; perhaps we should check usr permissions --->
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select responseset.*, responsesetstatus.responsesetstatusname, form.formid, form.formname, usr.usrname 
 	from responseset  inner join form on form.formid=responseset.form
 	inner join usr on usr.usrid=responseset.usr
@@ -141,7 +141,7 @@
 	<!--- STUB: this will need optimizing --->
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select responseset.*, responsesetstatus.responsesetstatusname, form.formid, form.formname, usr.usrname 
 	from responseset inner join form on form.formid=responseset.form
 	inner join usr on usr.usrid=responseset.usr
@@ -170,7 +170,7 @@
 	<!--- STUB: this will need optimizing --->
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select * from responseset where  usr = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.usr#">
 	order by responsesetstatus, datelastupdated desc
 	</cfquery>
@@ -184,7 +184,7 @@
 	<!--- STUB: this will need optimizing --->
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select * from responseset where form = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.form#"> and usr = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.usr#">
 	order by responsesetstatus, datelastupdated desc
 	</cfquery>
@@ -202,7 +202,7 @@
 		Error! Invalid responsesetid<cfabort>
 	</cfif>
 	<!--- if this is already active, the following update will have no effect, but notices will get re-sent--->
-	<cfquery name="qChange" datasource="#application.dsn#">
+	<cfquery name="qChange" >
 	update responseset set responsesetstatus = 2
 		where responsesetid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsesetid#">
 	</cfquery>
@@ -222,7 +222,7 @@
 	<cfif not isnumeric(arguments.responsesetid) and arguments.responsesetid gt 0>
 		Error! Invalid responsesetid<cfabort>
 	</cfif>
-	<cfquery name="qChange" datasource="#application.dsn#">
+	<cfquery name="qChange" >
 	update responseset set responsesetstatus = 4, currentassignee = creator
 		where responsesetid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsesetid#">
 	</cfquery>
@@ -244,7 +244,7 @@
 	<cfif not isnumeric(arguments.responsesetid) and arguments.responsesetid gt 0>
 		Error! Invalid responsesetid<cfabort>
 	</cfif>
-	<cfquery name="qChange" datasource="#application.dsn#">
+	<cfquery name="qChange" >
 	update responseset set responsesetstatus = 1, currentassignee = creator
 		where responsesetid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsesetid#">
 	</cfquery>
@@ -258,14 +258,14 @@
 	<cfset var qget = "">
 	<cfset var qinsert = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select responsesetid, form, usr, responsesetstatus, currentassignee
 	
 	from responseSet
 	where responseset.responsesetid = #arguments.responsesetid# 
 	</cfquery>
 
-	<cfquery name="qinsert" datasource="#application.dsn#">
+	<cfquery name="qinsert" >
 	insert into responsesethistory ( responsesetid, form, usr, responsesetstatus, currentassignee ) values ( #qget.responsesetid#, #qget.form#, #qget.usr#, #qget.responsesetstatus#, #qget.currentassignee# )
 		
 	</cfquery>
@@ -360,7 +360,7 @@
 
 	<cfif arguments.formdata.responsesetid eq "" or arguments.formdata.responsesetid eq 0>
 		<!--- this is a new response, begin by creating a responsesetid --->
-		<cfquery name="qInsert" datasource="#application.dsn#" result="db">
+		<cfquery name="qInsert"  result="db">
 		insert into responseset ( form, usr, creator, currentassignee ) values ( <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formdata.formid#">, <cfqueryparam cfsqltype="cf_sql_integer" value="#session.usr.usrid#">, <cfqueryparam cfsqltype="cf_sql_integer" value="#session.usr.usrid#">, <cfqueryparam cfsqltype="cf_sql_integer" value="#session.usr.usrid#"> )
 		</cfquery>
 		<!--- db returns insert information, including the new responsesetid --->
@@ -369,7 +369,7 @@
 	<cfelse>
 		<cfset responsesetid = arguments.formdata.responsesetid>
 
-		<cfquery name="qUpdate" datasource="#application.dsn#">
+		<cfquery name="qUpdate" >
 		update responseset set datelastupdated = now();
 		</cfquery>
 
@@ -539,21 +539,21 @@
 	<Cfset var q2 = "">
 	<cfset var q3 = "">
 
-	<cfquery name="q1" datasource="#application.dsn#">
+	<cfquery name="q1" >
 	select form from responseset where responsesetid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsesetid#">
 	</cfquery>
 	<cfif q1.recordcount>
-		<cfquery name="q2" datasource="#application.dsn#">
+		<cfquery name="q2" >
 		select finalassignee from form where formid = #q1.form#
 		</cfquery>
 		<Cfif q2.recordcount>
 			<cfif q2.finalassignee eq 0>
 				<!--- the default is to clomplete the request --->
-				<cfquery name="q3" datasource="#application.dsn#">
+				<cfquery name="q3" >
 				update responseset set currentassignee = #q2.finalassignee#, responsesetstatus = 4 where responsesetid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsesetid#">
 				</cfquery>
 			<cfelse>
-				<cfquery name="q3" datasource="#application.dsn#">
+				<cfquery name="q3" >
 				update responseset set currentassignee = #q2.finalassignee#, responsesetstatus = 3 where responsesetid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsesetid#">
 				</cfquery>
 			</cfif>

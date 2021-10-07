@@ -6,7 +6,7 @@
 
 <cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 		select filepath from responsedata where formfield = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formfield#"> and responseset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responseset#">
 	</cfquery>
 	<!---<cfdump var="#qget#">--->
@@ -66,7 +66,7 @@
 			</cfif>
 			<!--- remove the record --->
 		<!--- Should no longer be required	
-		<cfquery name="qcheck" datasource="#application.dsn#">
+		<cfquery name="qcheck" >
 			delete from fileattachment where fileattachmentid = <cfqueryparam cfsqltype="cf_sql_integer" value="#qcheck.fileattachmentid#"> 
 			</cfquery> --->
 
@@ -80,7 +80,7 @@
 		<cflock name="#arguments.targetpath#" type="exclusive" timeout="10">
 			<cffile action="upload" destination="#arguments.targetpath#" filefield="#arguments.filefield#" nameconflict="overwrite">
 		</cflock>
-		<!---<cfquery name="qFileInsert" datasource="#application.dsn#">
+		<!---<cfquery name="qFileInsert" >
 		insert into fileattachment ( filepath, creator, formfield, originalfilename, responseset ) values (
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#cffile.serverfile#">, 							 
 			<cfqueryparam cfsqltype="cf_sql_integer" value="#session.usr.usrid#">, 

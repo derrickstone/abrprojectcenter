@@ -9,7 +9,7 @@
 		<cfset var currentvalue = 0>
 
 		<!--- get the current satisfied value --->
-		<cfquery name="qcheckstatus" datasource="#application.dsn#">
+		<cfquery name="qcheckstatus" >
 			select responsedata.*, approvalset.approvalsetid, approvalset.approvaltype, form.formid, formfield.sortkey from responsedata
 			inner join formfield on formfield.formfieldid = responsedata.formfield
 			inner join approvalset on approvalset.approvalsetid = formfield.approvalset
@@ -23,7 +23,7 @@
 		<!--- check the usr --->
 		<cfif isnumeric(responsedata.usr) and responsedata.usr neq 0>
 
-			<cfquery name="qcheckapproval"datasource="#application.dsn#">
+			<cfquery name="qcheckapproval">
 			select responsetype from approval where usr = <cfqueryparam cfsqltype="cf_sql_integer" value="#qcheckstatus.usr#">
 			and approvaldata = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsedataid#">
 			</cfquery>
@@ -33,13 +33,13 @@
 		</cfif>
 		<!--- check the group --->
 		<cfif isnumeric(responsedata.approvalgroup) and responsedata.approvalgroup neq 0>
-			<cfquery name="qGetGroupMembers" datasource="#application.dsn#">
+			<cfquery name="qGetGroupMembers" >
 			select usr from keyusrapprovalgroup where approvalgroup = <cfqueryparam cfsqltype="cf_sql_integer" value="#responsedata.approvalgroup#">
 			</cfquery>
 			<cfif qGetGroupMembers.recordcount>
 				<cfset currentvalue = 0>
 				<cfif qcheckstatus.approvaltype eq 1> <!--- all --->
-					<cfquery name="qCheckGroup" datasource="#application.dsn#">
+					<cfquery name="qCheckGroup" >
 					select responsetype from approval where usr in <cfqueryparam cfsqltype="cf_sql_integer" value="#valuelist(qGetGroupMembers.usr)#" list="true">
 					</cfquery>
 					<cfif qCheckGroup.recordcount lt qGetGroupMembers.recordcount>
@@ -58,7 +58,7 @@
 				<cfelse>
 					<!--- anyone in the group can approve --->
 					<!--- STUB: this ignores a return --->
-					<cfquery name="qCheckGroup" datasource="#application.dsn#">
+					<cfquery name="qCheckGroup" >
 					select responsetype from approval where usr in <cfqueryparam cfsqltype="cf_sql_integer" value="#valuelist(qGetGroupMembers.usr)#" list="true"> and approvaltype = 1
 					</cfquery>
 					<cfif qcheckgroup.recordcount gt 1>
@@ -71,11 +71,11 @@
 		<!--- check adhoc approvals --->
 		
 		<cfif isnumeric (qGetAdHocNumber.adhocnumber)>
-			<cfquery name="qCheckAdHoc" datasource="#application.dsn#">
+			<cfquery name="qCheckAdHoc" >
 				select * from adhoc where approvaltype = 1 and responsedata = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsedataid#">
 				</cfquery>
 			<cfif qCheckStatus.approvaltype eq 1> <!--- all --->
-				<cfquery name="qGetAdHocNumber" datasource="#application.dsn#">
+				<cfquery name="qGetAdHocNumber" >
 				select adhocnumber from approvaldata where approvalset = <cfqueryparam cfsqltype="cf_sql_integer" value="#qcheckStatus.approvalsetid#">
 				</cfquery>
 
@@ -94,7 +94,7 @@
 		<cfif previousvalue neq qchecknewvalue.value>
 			<!--- handle notifications --->
 			<!--- we want to notify the next actor --->
-			<cfquery name="qGetNext" datasource="#application.dsn#">
+			<cfquery name="qGetNext" >
 			select * from formfield where form = <cfqueryparam cfsqltype="cf_sql_integer" value="#qcheckStatus.formid#">
 				and sortkey > <cfqueryparam cfsqltype="cf_sql_integer" value="#qcheckStatus.sortkey#">
 				order by sortkey asc
@@ -120,7 +120,7 @@
 
 	<Cfset var qget = "">
 
-	<Cfquery name="qget" datasource="#application.dsn#">
+	<Cfquery name="qget" >
 	select * from approval where approvalset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.approvalsetid#">
 </Cfquery>
 
@@ -130,7 +130,7 @@
 	<cfargument name="responsedataid">
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 		select formfield from responsedata 
 		where responsedata.responsedataid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsedataid#">
 	</cfquery>
@@ -141,7 +141,7 @@
 	<cfargument name="responsedataid">
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 		select form from responseset inner join responsedata on responsedata.responseset = responseset.responsesetid
 		where responsedata.responsedataid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsedataid#">
 	</cfquery>
@@ -160,7 +160,7 @@
 		<Cfreturn "">
 	</Cfif>
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select stringresponse from responsedata
 	inner join formfield on formfield.formfieldid = responsedata.formfield
 	 where responseset = #arguments.responseset# and responsedataid < #arguments.responsedata# order by responsedata desc
@@ -174,7 +174,7 @@
 	<cfargument name="responsedataid">
 
 	<Cfset var qget ="">
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select responseset from responsedata where responsedataid =  <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsedataid#">
 	</cfquery>
 
@@ -189,7 +189,7 @@
 	<cfset var stTemp = structnew()>
 	
 	<!--- STUB: add indexes --->
-	<cfquery name="qGet" datasource="#application.dsn#">
+	<cfquery name="qGet" >
 	select * from responsedata where formfield = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formfield#"> and responseset=<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responseset#">
 	</cfquery>
 	
@@ -211,12 +211,12 @@
 	<cfif arguments.optionset eq "" or arguments.responseset eq "" or arguments.responsedata eq "">
 		<Cfreturn "">
 	</Cfif> --->
-	<cfquery name="qResponseSet" datasource="#application.dsn#">
+	<cfquery name="qResponseSet" >
 	select responseset from responsedata where responsedataid = #arguments.responsedata#
 	</cfquery>
 
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select stringresponse from responsedata
 	inner join formfield on formfield.formfieldid = responsedata.formfield
 	 where 

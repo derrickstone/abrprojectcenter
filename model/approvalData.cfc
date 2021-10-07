@@ -11,10 +11,10 @@
 	<cfset var qApprovals = "">
 	<cfset var qApprovalData = "">
 
-	<cfquery name="qApprovalSets" datasource="#application.dsn#">
+	<cfquery name="qApprovalSets" >
 	select * from approvalset where formfield = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formfieldid#">
 	</cfquery>
-	<cfquery name="qApprovals" datasource="#application.dsn#">
+	<cfquery name="qApprovals" >
 	select * from approvaldata 
 	left outer join approval on approval.approvaldata = approvaldata.approvaldataid
 	where approvalset = <cfqueryparam cfsqltype="cf_sql_integer" value="#qApprovalSets.approvalsetid#">
@@ -367,7 +367,7 @@
 
 	<Cfset var qget = "">
 
-	<Cfquery name="qget" datasource="#application.dsn#">
+	<Cfquery name="qget" >
 	select approvaldata.*, usr.lastname, usr.firstname, usr.email, approvalgroup.approvalgroupname  from approvaldata 
 	left outer join usr on usr.usrid = approvaldata.usr
 	left outer join approvalgroup on approvalgroup.approvalgroupid = approvaldata.approvalgroup
@@ -388,7 +388,7 @@
 	<cfset var stTemp = structnew()>
 	
 	<!--- STUB: add indexes --->
-	<cfquery name="qGet" datasource="#application.dsn#">
+	<cfquery name="qGet" >
 	select * from approval where approvalset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.approvalset#"> and responsedata=<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsedata#">
 	</cfquery>
 	
@@ -403,7 +403,7 @@
 
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select approvalset from approvaldata where approvaldataid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.approvaldataid#">
 	</cfquery>
 
@@ -412,7 +412,7 @@
 <cffunction name="getdata" output="false">
 	<cfargument name="id">
 	<cfset var qqet = "">
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select approvaldata.*, usr.lastname, usr.firstname, usr.email, approvalgroup.approvalgroupname, approvaldataid as id 
 	from approvaldata 
 	left outer join usr on usr.usrid = approvaldata.usr

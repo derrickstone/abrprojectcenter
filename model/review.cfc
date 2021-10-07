@@ -24,7 +24,7 @@
 
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select review.*, usr.usrname, usr.firstname, usr.lastname, usr.email, responsetype.responsetypename from review inner join usr on usr.usrid=review.usr inner join responsetype on responsetype.responsetypeid=review.responsetype
 		where review.responsedata = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsedata#">
 		and review.approvaldata = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.approvaldata#">
@@ -44,7 +44,7 @@
 
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select review.*, usr.usrname from review 
 	inner join usr on usr.usrid = review.usr
 	where reviewid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
@@ -58,7 +58,7 @@
 
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select * from review where 
 		responsedata = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsedata#">
 		and approvalset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.approvalset#">
@@ -84,7 +84,7 @@
 <!--- save the approval 
 approvals come in via email, and we'd like to prevent duplicates --->
 
-<cfquery name="qcheck" datasource="#application.dsn#">
+<cfquery name="qcheck" >
 select * from review where 
 	usr = #arguments.formdata.usr# and 
 	approvalset = #arguments.formdata.approvalset# and 
@@ -92,7 +92,7 @@ select * from review where
 	responsedata = #arguments.formdata.responsedata# 
 </cfquery>
 <cfif qcheck.recordcount > <!--- update ---> 
-	<cfquery name="qupdate" datasource="#application.dsn#">
+	<cfquery name="qupdate" >
 	update review set 
 		datelastupdated = now(),
 		responsetype = #arguments.formdata.responsetype#,

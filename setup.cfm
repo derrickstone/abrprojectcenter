@@ -16,7 +16,7 @@
 	<cfloop list="#luserdatatables#" index="t">
 		clearing table #t#
 
-	<Cfquery name="qd1" datasource="#application.dsn#">
+	<Cfquery name="qd1" >
 	delete from #t#
 	</Cfquery>
 	done.<br>

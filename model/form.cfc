@@ -11,25 +11,25 @@
 	<cfset var qdelresponseset = "">
 	<cfset var qdelresponsedata = "">
 
-	<cfquery name="qdelkeyformorganization" datasource="#application.dsn#">
+	<cfquery name="qdelkeyformorganization" >
 	delete from keyformorganization where form = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
-	<cfquery name="qdelkeyformgroupform" datasource="#application.dsn#">
+	<cfquery name="qdelkeyformgroupform" >
 	delete from keyformgroupform where form = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
-	<cfquery name="qformfield" datasource="#application.dsn#">
+	<cfquery name="qformfield" >
 	select formfieldid from formfield where form = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
-	<cfquery name="qdelresponseset" datasource="#application.dsn#">
+	<cfquery name="qdelresponseset" >
 	delete from responseset where form = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
-	<cfquery name="qdelresponsedata" datasource="#application.dsn#">
+	<cfquery name="qdelresponsedata" >
 	delete from responsedata where formfield in (<cfqueryparam cfsqltype="cf_sql_integer" value="#valuelist(qformfield.formfieldid)#" list="true">)
 	</cfquery>
-	<cfquery name="qdelformfield" datasource="#application.dsn#">
+	<cfquery name="qdelformfield" >
 	delete from formfield where form = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
-	<cfquery name="qdelform" datasource="#application.dsn#">
+	<cfquery name="qdelform" >
 	delete from form where formid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
 	<cfreturn "deleted">
@@ -43,7 +43,7 @@
 	<cfset var qget = "">
 	<cfset var lApprovers = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select * from formfield inner join approvalset on approvalset.approvalsetid = formfield.approvalset
 	inner join approvaldata on approvaldata.approvalset = approvalset.approvalsetid
 	 where formfield.fieldtype = 7 
@@ -108,7 +108,7 @@
 	<cfset var qGet="">
 	<cfset var aFields = "">
 	
-	<cfquery name="qGet" datasource="#application.dsn#">
+	<cfquery name="qGet" >
 	select * from formfield where form = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formid#">
 	order by sortkey
 	</cfquery>
@@ -128,7 +128,7 @@
 	<cfset var f = "">
 	<Cfset var stTemp = structnew()>
 	
-	<cfquery name="qGet" datasource="#application.dsn#">
+	<cfquery name="qGet" >
 	select * from formfield where form = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formid#">
 	order by sortkey
 	</cfquery>
@@ -399,7 +399,7 @@
 	<cfargument name="responsedataid">
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select formfield.form, responsedata.responseset from formfield inner join responsedata on responsedata.formfield = formfield.formfieldid 
 	where responsedata.responsedataid = #arguments.responsedataid#
 	</cfquery>
@@ -417,7 +417,7 @@
 
 	<cfset var qget = "">
 	
-	<Cfquery name="qget" datasource="#application.dsn#">
+	<Cfquery name="qget" >
 		select formid, formname from form where 
 		<cfif isnumeric(arguments.formgroup)>
 			formid in ( select form from keyformgroupform where formgroup = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formgroup#"> )
@@ -435,11 +435,11 @@
 	<cfargument name="organization" default="">
 	<cfset var qget = "">
 	<cfif isnumeric(arguments.organization)>
-		<Cfquery name="qget" datasource="#application.dsn#">
+		<Cfquery name="qget" >
 		select formid, formname from form where formid in ( select form from keyformorganization where organization = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.organization#"> )
 		</Cfquery>
 	<cfelse>
-		<Cfquery name="qget" datasource="#application.dsn#">
+		<Cfquery name="qget" >
 		select formid, formname from form where formid not in ( select distinct form from keyformorganization )
 		</Cfquery>
 	</cfif>
@@ -452,7 +452,7 @@
 
 		<cfset var qget = "">
 
-		<cfquery name="qget" datasource="#application.dsn#">
+		<cfquery name="qget" >
 		select * from responseset where form = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formid#">
 		order by datecreated desc
 		</cfquery>

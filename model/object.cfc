@@ -34,17 +34,17 @@
 		<!--- STUB: hm, archive? --->
 		<!--- check access level --->
 		<cfif session.usr.accesslevel lte 2>
-			<cfquery name="qDelete" datasource="#application.dsn#">
+			<cfquery name="qDelete" >
 			delete from #arguments.type# where #arguments.type#id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 			</cfquery>
 			
 			<cfreturn "Deleted.">
 		<cfelseif session.usr.accesslevel gt 2>
-			<cfquery name="qcheck" datasource="#application.dsn#">
+			<cfquery name="qcheck" >
 			select * from #arguments.type# where #arguments.type#id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#"> and creator = #session.usr.usrid#
 			</cfquery>
 			<cfif qcheck.recordcount gt 0>
-				<cfquery name="qDelete" datasource="#application.dsn#">
+				<cfquery name="qDelete" >
 				delete from #arguments.type# where #arguments.type#id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#"> and creator = #session.usr.usrid#
 				</cfquery>
 				
@@ -119,7 +119,7 @@
 	<cfargument name="sortOrder" default="">
 
 	<cfset var qget = "">
-	<Cfquery name="qget" datasource="#application.dsn#">
+	<Cfquery name="qget" >
 		select #arguments.type#id, #arguments.type#id as id, #arguments.type#name, #arguments.type#name as name 
 		<cfif len(arguments.lAdditionalFields)>, #arguments.lAdditionalFields#</cfif>
 		from #arguments.type#
@@ -149,7 +149,7 @@
 
 
 	<!--- STUB: this is an insecure query --->
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select #arguments.datafield# as selected from #arguments.datatable# where #arguments.pkfield# = #arguments.pkvalue#
 	<cfif len(arguments.sortOrder)>
 	order by #arguments.sortOrder#
@@ -185,7 +185,7 @@
 		<cfif structkeyexists(arguments.formdata,pkfield) and isnumeric(arguments.formdata[pkfield])>
 			<cfset pkvalue = arguments.formdata[pkfield]>
 			<!--- get the fields for this type STUB: cache this? --->
-			<cfquery name="qInspect" datasource="#application.dsn#">
+			<cfquery name="qInspect" >
 			select * from #arguments.formdata.type# where 0 = 1
 			</cfquery>
 			<cfset lAllowedFields = qInspect.columnlist>
@@ -214,7 +214,7 @@
 					<cfset parentcolumn="form">
 				</Cfif>
 				<!--- get the current max value and add one --->
-				<cfquery name="qmax" datasource="#application.dsn#">
+				<cfquery name="qmax" >
 				select max(sortkey)+1 as newsortkey from #arguments.formdata.type# where #parentcolumn# = #arguments.formdata[parentcolumn]#
 				</cfquery>
 				<cfif qmax.recordcount eq 0 or qmax.newsortkey eq "">
@@ -228,7 +228,7 @@
 			</cfif>
 			<!---<cftry>--->
 			<cfif pkvalue eq -1 and listlen(lFields) gt 0> <!--- this is a new record --->
-				<cfquery name="qsave" datasource="#application.dsn#" result="db">
+				<cfquery name="qsave"  result="db">
 					insert into #arguments.formdata.type# ( #lFields#) values ( #preservesinglequotes(lValues)# )
 				</cfquery>
 				<cfset recordInserted=db.generatedKey>
@@ -239,7 +239,7 @@
 			<cfelse>
 				<!--- '#replace(arguments.formdata[t],"'","''","all")#' 
 				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.formdata[t]#">--->
-				<cfquery name="qsave" datasource="#application.dsn#">
+				<cfquery name="qsave" >
 				update #arguments.formdata.type#
 				set <cfloop list="#lfields#" index="t">#t# = '#arguments.formdata[t]#', </cfloop>
 				datelastupdated = current_timestamp
@@ -257,7 +257,7 @@
 			<cfloop collection="#arguments.formdata#" item="f">
 				<cfif left(f,3) eq "key">
 					<!--- get column names... maybe this should someday save a history --->
-					<cfquery name="qKeySave" datasource="#application.dsn#">
+					<cfquery name="qKeySave" >
 					select * from #f# where 0 =1
 					</cfquery>
 					<cfloop list="#qKeySave.columnlist#" index="p">
@@ -268,11 +268,11 @@
 					</cfloop>
 					<cfif targetColumn neq "">
 						<!--- simply delete existing relations and re-add them --->
-						<cfquery name="qKeyDelete" datasource="#application.dsn#">
+						<cfquery name="qKeyDelete" >
 						delete from #f# where #arguments.formdata.type# = #pkvalue#
 						</cfquery>
 						<cfloop list="#arguments.formdata[f]#" index="i">
-							<cfquery name="qKeySave" datasource="#application.dsn#">
+							<cfquery name="qKeySave" >
 							insert into #f# ( #arguments.formdata.type#, #targetColumn# ) values ( #pkvalue#, #i# )
 							</cfquery>
 						</cfloop>
@@ -300,7 +300,7 @@
 	<cfset var oEntity = "">
 	<cfset var qGet = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select * from #arguments.type# where #arguments.type#id = #arguments.id#
 	</cfquery>
 

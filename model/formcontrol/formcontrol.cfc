@@ -61,7 +61,7 @@
 	</cfif>
 
 	<!---<cfif isnumeric(arguments.formfieldid)>
-		<cfquery name="qFormField" datasource="#application.dsn#">
+		<cfquery name="qFormField" >
 		select * from formfield where formfieldid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formfieldid#">
 		</cfquery>
 	</cfif>--->
@@ -380,7 +380,7 @@
 	<cfif structkeyexists(application.stLabel,arguments.fieldName)>
 		<cfset sReturn = application.stLabel[arguments.fieldName]>
 	<cfelse>
-		<cfquery name="qGet" datasource="#application.dsn#" cachedwithin="#createtimespan(0,1,0,0)#"><!--- cached one hour --->
+		<cfquery name="qGet"  cachedwithin="#createtimespan(0,1,0,0)#"><!--- cached one hour --->
 		select fieldLabel from fieldLabel where fieldName = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fieldName#">
 		</cfquery>
 		<cfif qGet.recordcount gt 0>			

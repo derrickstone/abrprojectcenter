@@ -3,7 +3,7 @@
 </cfif>
 <cfif isdefined("form.submit") and form.submit eq "Submit" and isdefined("form.confirmation") and isvalid("UUID",form.confirmation)>
 
-	<cfquery name="qcheckusrname" datasource="#application.dsn#">
+	<cfquery name="qcheckusrname" >
 	select * from usr where usrname = <cfqueryparam cfsqltype="cf_sql_varchar" value="#form.usrname#">
 	</cfquery>
 	<cfif qcheckusrname.recordcount gt 0>
@@ -13,12 +13,12 @@
 
 		<!--- Check for a unique email --->
 
-		<cfquery name="qcheck" datasource="#application.dsn#">
+		<cfquery name="qcheck" >
 		select usrid from usr where email = <cfqueryparam cfsqltype="cf_sql_varchar" value="#form.email#">
 		</cfquery>
 		<cfif qcheck.recordcount eq 0>
 
-			<cfquery name="qInsert" datasource="#application.dsn#">
+			<cfquery name="qInsert" >
 			insert into usr ( firstname, lastname, email, usrname, password, confirmation ) values (
 				<cfqueryparam cfsqltype="cf_sql_varchar" value="#form.firstname#">,
 				<cfqueryparam cfsqltype="cf_sql_varchar" value="#form.lastname#">,

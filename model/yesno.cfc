@@ -6,7 +6,7 @@
 
 		<!--- STUB: this should, at a minimum, be cached --->
 
-		<Cfquery name="qget" datasource="#application.dsn#">
+		<Cfquery name="qget" >
 		select yesnoname from yesno where yesnoid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.yesnoid#">
 		</cfquery>
 

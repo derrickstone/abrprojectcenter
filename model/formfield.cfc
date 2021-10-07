@@ -17,13 +17,13 @@
 	</cfif>
 	
 
-	<cfquery name="qDelete1" datasource="#application.dsn#">
+	<cfquery name="qDelete1" >
 	delete from adhoc where formfield = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
-	<cfquery name="qDelete2" datasource="#application.dsn#">
+	<cfquery name="qDelete2" >
 	delete from review where formfield = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
-	<cfquery name="qget1" datasource="#application.dsn#">
+	<cfquery name="qget1" >
 	select * from fileattachment where formfield = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
 	<!--- loop over files and delete them --->
@@ -31,20 +31,20 @@
 			<!--- STUB: to do --->
 	</cfloop>
 
-	<cfquery name="qDelete3" datasource="#application.dsn#">
+	<cfquery name="qDelete3" >
 	delete from fileattachment where formfield = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
-	<cfquery name="qDelete4" datasource="#application.dsn#">
+	<cfquery name="qDelete4" >
 	delete from responsedata where formfield = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
-	<cfquery name="qget2" datasource="#application.dsn#">
+	<cfquery name="qget2" >
 	select form, sortkey from formfield where formfieldid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
-	<cfquery name="qDelete5" datasource="#application.dsn#">
+	<cfquery name="qDelete5" >
 	delete from formfield where formfieldid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 	</cfquery>
 	<cfif isnumeric(qget2.sortkey)>
-		<cfquery name="qshift" datasource="#application.dsn#">
+		<cfquery name="qshift" >
 		update formfield set sortkey = sortkey-1 where form = #qget2.form# and sortkey > #qget2.sortkey#
 		</cfquery>
 	</cfif>
@@ -65,7 +65,7 @@
 		<cfset sReturn = application.stFieldType[arguments.formfieldtypeid]>
 	<cfelse>
 
-		<cfquery name="qget" datasource="#application.dsn#">
+		<cfquery name="qget" >
 		select component from formfieldtype where formfieldtypeid =  <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formfieldtypeid#">
 		</cfquery>
 		<cflock scope="application" timeout="10" type="exclusive">
@@ -81,7 +81,7 @@
 
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select responsedatacolumn from formfieldtype where formfieldtypeid = #arguments.formfieldtypeid#
 	</cfquery>
 
@@ -107,7 +107,7 @@
 	<cfif structkeyexists(application.stTargetColumn,arguments.formfieldid) eq true>
 		<cfset returnValue = application.stTargetColumn[arguments.formfieldid]>
 	<cfelse>
-		<cfquery name="qget" datasource="#application.dsn#">
+		<cfquery name="qget" >
 		select targetcolumn from formfield where formfieldid = #arguments.formfieldid#
 		</cfquery>
 
@@ -156,7 +156,7 @@
 
 
 	<cfif isnumeric(arguments.responseset) and arguments.responseset neq 0>
-		<cfquery name="qcheck" datasource="#application.dsn#">
+		<cfquery name="qcheck" >
 		select * from responsedata where formfield = <cfqueryparam cfsqltype="cf_sql_integer" value="#int(arguments.formfieldid)#">
 		and responseset = <cfqueryparam cfsqltype="cf_sql_integer" value="#int(arguments.responseset)#">
 		</cfquery>
@@ -173,7 +173,7 @@
 			</cfif>
 			
 			<cfif (ischanged)>
-				<cfquery name="qSave" datasource="#application.dsn#">
+				<cfquery name="qSave" >
 				update responsedata set #targetcolumn# = 
 				<cfswitch expression="#targetcolumn#">
 					<cfcase value="stringresponse">
@@ -215,7 +215,7 @@
 	<cfset var qsave = "">
 
 	<!--- kind of not cohesive to have this save here --->
-	<cfquery name="qSave" datasource="#application.dsn#" result="db">
+	<cfquery name="qSave"  result="db">
 		insert into responsedata (  formfield, responseset, #arguments.targetcolumn#, creator ) values (
 			
 			<cfqueryparam cfsqltype="cf_sql_integer" value="#int(arguments.formfieldid)#">,

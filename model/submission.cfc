@@ -6,17 +6,17 @@
 	<cfset var qApprovalGroups = "">
 	<cfset var qAdHoc = "">
 
-	<cfquery name="qApprovalGroup" datasource="#application.dsn#">
+	<cfquery name="qApprovalGroup" >
 	select approvalgroup from keyusrapprovalgroup where 
 	usr = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.usr#">
 	</cfquery>
 
-	<cfquery name="qAdHoc" datasource="#application.dsn#">
+	<cfquery name="qAdHoc" >
 	select responseset from adhoc where usr = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.usr#">
 	</cfquery>
 
 	<!--- join form, formfield, approvalset, approvaldata, responseset --->
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select form.formid, responseset.form,
 	responseset.responsesetid, form.formname, 
 	responseset.datelastupdated, usr.usrname,

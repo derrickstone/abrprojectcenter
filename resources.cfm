@@ -53,11 +53,11 @@
 						
 						<!--- get the current sortkey value, swap this element with the one before it. --->
 						
-						<cfquery name="qMakeSpace" datasource="#application.dsn#">
+						<cfquery name="qMakeSpace" >
 						update formfield set sortkey = sortkey+1
 							where form = <cfqueryparam cfsqltype="integer" value="#form.form#"> and sortkey = <cfqueryparam cfsqltype="integer" value="#fieldBefore#">
 						</cfquery>
-						<cfquery name="qReposition" datasource="#application.dsn#">
+						<cfquery name="qReposition" >
 						update formfield set sortkey = sortkey-1
 							where formfieldid = <cfqueryparam cfsqltype="integer" value="#form.formfieldid#">
 						</cfquery>
@@ -66,11 +66,11 @@
 					<cfelseif form.changeOrder eq "Move down">
 						<!--- get the current sortkey value, swap this element with the one below it --->
 
-						<cfquery name="qMakeSpace" datasource="#application.dsn#">
+						<cfquery name="qMakeSpace" >
 						update formfield set sortkey = sortkey-1
 							where form = <cfqueryparam cfsqltype="integer" value="#form.form#"> and sortkey = <cfqueryparam cfsqltype="integer" value="#fieldAfter#">
 						</cfquery>
-						<cfquery name="qReposition" datasource="#application.dsn#">
+						<cfquery name="qReposition" >
 						update formfield set sortkey = sortkey+1
 							where formfieldid = <cfqueryparam cfsqltype="integer" value="#form.formfieldid#">
 						</cfquery>

@@ -6,7 +6,7 @@
 
 	<Cfset var qDel = "">
 
-	<cfquery name="qDel" datasource="#application.dsn#">
+	<cfquery name="qDel" >
 		delete from keyoptiondata
 		where  formfieldid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formfieldid#"> 
 		and responseset =  <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsesetid#">
@@ -18,7 +18,7 @@
 
 	<Cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 		select optiondataid, optiondataid as id, optiondataname, optiondataname as value, optiondataname as name, sortkey from optiondata
 		where optionset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.optionsetid#">
 	</cfquery>
@@ -28,7 +28,7 @@
 	<cfargument name="optiondata">
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select keyusroptiondata.usr, usr.usrid, usr.firstname, usr.lastname, usr.email
 	from keyusroptiondata inner join usr on usr.usrid=keyusroptiondata.usr
 	where keyusroptiondata.optiondata = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.optiondata#">
@@ -45,7 +45,7 @@
 
 	<cfset var qget = "">
 <!--- hmmm - the optionset value may not be required --->
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select value from keyOptionData where formfieldid  = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formfieldid#">
 	and responseset  = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsesetid#">
 	and responsedata  = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsedataid#">
@@ -61,7 +61,7 @@
 
 	<cfset var qget = "">
 
-	<Cfquery name="qget" datasource="#application.dsn#">
+	<Cfquery name="qget" >
 	select optiondata from keyusroptiondata where usr = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.usr#">
 	</Cfquery>
 
@@ -71,7 +71,7 @@
 
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select concat(optionset.optionsetname,'-',optiondata.optiondataname) as name, optiondata.optiondataid as id from optiondata inner join keyusroptiondata on optiondata.optiondataid = keyusroptiondata.optiondata inner join optionset on optiondata.optionset = optionset.optionsetid
 	order by optiondataname
 
@@ -91,7 +91,7 @@
 	<cfset clearOptionData(formfieldid=arguments.formfieldid,responsesetid=arguments.responsesetid)>
 
 	<cfloop list="#arguments.selections#" index="s">
-		<cfquery name="qadd" datasource="#application.dsn#">
+		<cfquery name="qadd" >
 		insert into keyoptiondata ( formfieldid, responseset, responsedata, value ) values (
 			<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formfieldid#">,
 			<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsesetid#">,

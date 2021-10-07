@@ -5,7 +5,7 @@
 
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select keyusrapprovalgroup.usr, usr.usrid, usr.firstname, usr.lastname, usr.email
 	from keyusrapprovalgroup inner join usr on usr.usrid=keyusrapprovalgroup.usr
 	where keyusrapprovalgroup.approvalgroup = <cfqueryparam cfsqltype="cf_sql_integer" value="#int(arguments.approvalgroup)#">

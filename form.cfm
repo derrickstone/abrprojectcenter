@@ -280,7 +280,7 @@
 
 	<!--- get data about this form field --->
 			<!---<cfif isnumeric(aFields[t].formfieldid)>
-				<cfquery name="qFormField" datasource="#application.dsn#">
+				<cfquery name="qFormField" >
 				select * from formfield where formfieldid = <cfqueryparam cfsqltype="cf_sql_integer" value="#afields[t].formfieldid#">
 				</cfquery>
 			<cfelse>

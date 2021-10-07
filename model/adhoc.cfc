@@ -8,7 +8,7 @@
 	<!--- making the assumption these three fields will suffice --->
 	<Cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 		select reviewid from review where responsetype = 1 and usr = #arguments.authorizer#
 		and responsedata = #arguments.responsedata# and approvaldata = #arguments.approvaldata#
 	</cfquery>
@@ -89,7 +89,7 @@
 	<cfset var qget = "">
 	<cfset var aReturn = arraynew(1)>
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select adhoc.*, review.responsetype from adhoc left outer join review on review.reviewid = adhoc.review
 	where 
 		<cfif isnumeric(arguments.responseset)>
@@ -122,7 +122,7 @@
 	<cfargument name="id">
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 		select adhocid as id, adhocname as name, adhoc.*, form.formid from adhoc
 		inner join formfield on formfield.formfieldid = adhoc.formfield
 		inner join form on formfield.form = form.formid
@@ -134,7 +134,7 @@
 	<cfargument name="adhocid">
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 		select formfield.form from formfield inner join adhoc on adhoc.formfield = formfield.formfieldid
 		where adhocid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.adhocid#">
 	</cfquery>
@@ -153,7 +153,7 @@
 		<cfset arguments.responsedata = 0>
 	</cfif>
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select adhoc.*, usr.firstname, usr.lastname, usr.email, usr.department, responsetype.responsetypename
 	from adhoc left outer join usr on usr.usrid = adhoc.usr left outer join responsetype on responsetype.responsetypeid = adhoc.responsetype
 	where adhoc.responsedata = <cfqueryparam cfsqltype="cf_sql_integer" value="#int(arguments.responsedata)#"> 
@@ -195,7 +195,7 @@
 	<cfset var stResponse = structnew()>
 
 	<!--- create a cached data type for response types --->
-	<cfquery name="qResponse" datasource="#application.dsn#">
+	<cfquery name="qResponse" >
 	select * from responsetype
 	</cfquery>
 	<cfloop query="qResponse">
@@ -247,27 +247,27 @@
 	<cfif arguments.stdata.email eq "">
 		<Cfset usrid = 0>
 	<cfelse>
-		<cfquery name="qUsr" datasource="#application.dsn#">
+		<cfquery name="qUsr" >
 		select usrid from usr where email = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.stdata.email#">
 		</cfquery>
 		<!--- if needed, create a user account to let this person log in --->
 		<cfif qUsr.recordcount eq 0>
 			<!--- create this user, making sure the usrname is unique --->
 			<cfset newusrname="#arguments.stdata.firstname##arguments.stdata.lastname#">
-			<cfquery name="qcheck" datasource="#application.dsn#">
+			<cfquery name="qcheck" >
 			select usrid from usr where usrname = <cfqueryparam cfsqltype="cf_sql_varchar" value="#newusrname#">
 			</cfquery>
 			<cfset incr = 1>
 			<cfloop condition="#qcheck.recordcount# gt 0">
 				<cfset incr = incr+1>
 				<cfset newusrname = newusrname&incr>
-				<cfquery name="qcheck" datasource="#application.dsn#">
+				<cfquery name="qcheck" >
 				select usrid from usr where usrname = <cfqueryparam cfsqltype="cf_sql_varchar" value="#newusrname#">
 				</cfquery>
 			</cfloop>
 			
 
-			<cfquery name="qInsert" datasource="#application.dsn#" result="db">
+			<cfquery name="qInsert"  result="db">
 			insert into usr ( email, firstname, lastname, department, accesslevel, usrname ) values 
 				( <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.stdata.email#">,
 					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.stdata.firstname#">,
@@ -286,7 +286,7 @@
 
 	<cfif arguments.stdata.adhocid eq 0 or arguments.stdata.adhocid eq -1>
 		
-		<cfquery name="qSave" datasource="#application.dsn#">
+		<cfquery name="qSave" >
 		insert into adhoc ( sortkey, usr, responsedata, responseset, formfield, approvaldata, creator, firstname, lastname, department, email ) values 
 			( <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.stdata.sortkey#">,
 			  <cfqueryparam cfsqltype="cf_sql_integer" value="#usrid#">,
@@ -302,7 +302,7 @@
 				)
 		</cfquery>
 	<cfelse>
-		<cfquery name="qSave" datasource="#application.dsn#">
+		<cfquery name="qSave" >
 		update adhoc set 
 			usr=  <cfqueryparam cfsqltype="cf_sql_integer" value="#usrid#">,
 			firstname =  <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.stdata.firstname#">,

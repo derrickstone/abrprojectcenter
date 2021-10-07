@@ -9,11 +9,11 @@
 		<!--- check access level --->
 		<cfif session.usr.accesslevel eq 1>
 			<!--- STUB: maybe a good place for cftransaction? --->
-			<cfquery name="qDel1" datasource="#application.dsn#">
+			<cfquery name="qDel1" >
 			delete from optiondata where optionset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 			</cfquery>
 
-			<cfquery name="qDelete" datasource="#application.dsn#">
+			<cfquery name="qDelete" >
 			delete from optionset where optionsetid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 			</cfquery>
 			
@@ -28,7 +28,7 @@
 	<cfargument name="optionsetid">
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select optiondataid, optiondataid as id, optiondataname, optiondataname as name from optiondata where optionset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.optionsetid#">
 		order by sortkey
 	</cfquery>
@@ -39,7 +39,7 @@
 
 	<Cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select optiondataname from optiondata where optiondataid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.optiondataid#">
 	</cfquery>
 	<cfif qget.recordcount>
@@ -54,7 +54,7 @@
 	<cfset var qget = "">
 
 	<!--- stub: we should add somethin for the organization here 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select optionsetid, optionsetname from set where 
 	creator = #arguments.usr#
 	</cfquery> --->
@@ -70,14 +70,14 @@
 	<cfset var optionCounter = 0>
 	<cfset var lAdded = "">
 	<!--- think about this... will we lose user responses if we overwrite previous values? --->
-	<cfquery name="qClear" datasource="#application.dsn#">
+	<cfquery name="qClear" >
 	delete from optiondata where optionset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formdata.optionsetid#">
 	</cfquery>
 	
 	<cfloop list="#arguments.formdata.setData#" index="od" delimiters="#chr(13)##chr(10)#">
 		<!--- only add unique elements --->
 		<cfif listfindnocase(lAdded,od) eq "no">
-			<cfquery name="qsave" datasource="#application.dsn#">
+			<cfquery name="qsave" >
 			insert into optiondata ( optiondataname, creator, optionset, sortkey ) values ( <cfqueryparam value="#od#" cfsqltype="cf_sql_varchar">, <cfqueryparam cfsqltype="cf_sql_integer" value="#session.usr.usrid#">, <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formdata.optionsetid#">, <cfqueryparam cfsqltype="cf_sql_integer" value="#optionCounter#">)
 			</cfquery>
 

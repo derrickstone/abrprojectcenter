@@ -13,17 +13,17 @@
 		<!--- check access level --->
 		<cfif session.usr.accesslevel eq 1>
 			<!--- STUB: maybe a good place for cftransaction? --->
-			<cfquery name="qget" datasource="#application.dsn#">
+			<cfquery name="qget" >
 			select approvalid from approval where approvalset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 			</cfquery>
-			<cfquery name="qdel2" datasource="#application.dsn#">
+			<cfquery name="qdel2" >
 			delete from approval where approvalset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 			</cfquery>
-			<cfquery name="qDel1" datasource="#application.dsn#">
+			<cfquery name="qDel1" >
 			delete from approvaldata where approval in <cfqueryparam cfsqltype="cf_sql_integer" value="#valuelist(qget.approvalid)#" list="yes">
 			</cfquery>
 
-			<cfquery name="qDelete" datasource="#application.dsn#">
+			<cfquery name="qDelete" >
 			delete from approvalset where approvalsetid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
 			</cfquery>
 			
@@ -98,7 +98,7 @@
 	<cfset var qget = "">
 	<cfset var lApprovers = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select * from formfield inner join approvalset on approvalset.approvalsetid = formfield.approvalset
 	inner join approvaldata on approvaldata.approvalset = approvalset.approvalsetid
 	 where approvalset.approvalsetid = #arguments.approvalsetid# and formfield.fieldtype = 7 
@@ -145,7 +145,7 @@
 
 	<cfset qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 		select approvalset.*, approvalset.approvalsetid as id, approvalset.approvalsetname as name,
 		 approvaltype.approvaltypename from approvalset inner join 
 		approvaltype on approvaltype.approvaltypeid = approvalset.approvaltype
@@ -160,7 +160,7 @@
 	<cfargument name="optionsetid">
 	<cfset var qget = "">
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select optiondataid, optiondataid as id, optiondataname, optiondataname as name from optiondata where optionset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.optionsetid#">
 		order by sortkey
 	</cfquery>
@@ -173,13 +173,13 @@
 	<cfset var qgetApprovalGroup = "">
 	<cfset var lreturn = "">
 
-	<cfquery name="qgetusr" datasource="#application.dsn#">
+	<cfquery name="qgetusr" >
 	select approvaldataid, usr, approvalgroup, adhocnumber from approvaldata where approvalsetid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.approvalsetid#">
 	</cfquery>
 	<cfset lreturn = valuelist(qget.usr)>
 	<cfloop query="qGetUsr">
 		<cfif isnumeric(qGetUsr.approvalgroup)>
-			<cfquery name="qgetApprovalGroup" datasource="#application.dsn#">
+			<cfquery name="qgetApprovalGroup" >
 			select usr from keyusrapprovalgroup where approvalgropu = <cfqueryparam cfsqltype="cf_sql_integer" value="#qgetusr.approvalgroup#">
 			</cfquery>
 			<cfloop query="qGetApprovalGroup">
@@ -191,7 +191,7 @@
 	</cfloop>
 
 	<cfif isnumeric(qgetusr.adhocnumber) and qgetusr.adhocnumber neq 0>
-		<cfquery name="qgetAdHoc" datasource="#application.dsn#">
+		<cfquery name="qgetAdHoc" >
 		select usr from adhoc where approvaldata in <cfqueryparam cfsqltype="cf_sql_integer" value="#valuelist(qgetusr.approvaldata)#" list="true">
 		</cfquery>
 		<cfloop query="qGetAdHoc">
@@ -209,7 +209,7 @@
 	<cfset var qget = "">
 
 	<!--- stub: we should add somethin for the organization here 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select optionsetid, optionsetname from set where 
 	creator = #arguments.usr#
 	</cfquery> --->
@@ -223,7 +223,7 @@
 
 	<cfset var qUpdate = "">
 
-	<cfquery name="qUpdate" datasource="#application.dsn#">
+	<cfquery name="qUpdate" >
 	update approvalset set
 		<cfif isnumeric(arguments.satisfied)>
 		satisfied = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.satisfied#">

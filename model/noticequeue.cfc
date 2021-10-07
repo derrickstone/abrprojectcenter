@@ -10,7 +10,7 @@
 
 	<Cfset var qClear = "">
 
-	<cfquery name="qClear" datasource="#application.dsn#">
+	<cfquery name="qClear" >
 	update noticequeue set noticequeuestatus = 3, datelastupdated = '#datetimeformat(now())#'
 		where responseset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responseset#"> and noticequeuestatus = 2
 	</cfquery>
@@ -47,7 +47,7 @@
 
 	<cfloop list="#arguments.assignee#" index="u">
 		<!--- prevent duplicates --->
-		<Cfquery name="qCheck" datasource="#application.dsn#">
+		<Cfquery name="qCheck" >
 		select * from noticequeue where 
 		usr =<cfqueryparam cfsqltype="cf_sql_integer" value="#u#"> and
 		responseset = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responseset#"> 
@@ -56,7 +56,7 @@
 			)		
 		</Cfquery>
 		<cfif qCheck.recordcount eq 0>
-			<cfquery name="qIns" datasource="#application.dsn#">
+			<cfquery name="qIns" >
 			insert into noticequeue ( form, formfield, responseset, responsedata, usr, noticequeuestatus, messagetype, approvaldata ) values (
 			<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.form#">,
 			<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.formfield#">,
@@ -81,7 +81,7 @@
 	<cfset var qget = "">
 	<!--- if the user has already filed a review for this step, they do not need to be notified --->
 
-	<cfquery name="qget" datasource="#application.dsn#">
+	<cfquery name="qget" >
 	select reviewid from review where 
 	usr = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.reviewer#"> and
 	
@@ -109,7 +109,7 @@
 	<cfset var qForm = "">
 
 	<!--- getting the responsedata record --->
-	<Cfquery name="qForm" datasource="#application.dsn#">
+	<Cfquery name="qForm" >
 		select responsedata.responsedataid, responsedata.responseset, responsedata.formfield, responseset.form from responsedata 
 		inner join responseset on responsedata.responseset = responseset.responsesetid
 		where responsedataid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsedata#">
@@ -200,7 +200,7 @@
 
 		<cfset var qCreator = "">
 
-		<Cfquery name="qCreator" datasource="#application.dsn#">
+		<Cfquery name="qCreator" >
 		select form, creator from responseset where responsesetid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsesetid#">
 		</Cfquery>
 
@@ -215,7 +215,7 @@
 
 		<cfset var qFinalAssignee = "">
 
-		<Cfquery name="qFinalAssignee" datasource="#application.dsn#">
+		<Cfquery name="qFinalAssignee" >
 		select form.formid, form.finalassignee from form inner join responseset on responseset.form = form.formid where responseset.responsesetid = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.responsesetid#">
 		</Cfquery>
 
@@ -239,11 +239,11 @@
 			<cfif isnotautoreply(qmail.subject) eq false>
 				bounced mail<br />
 				If this user exists, mark this user as on hold<br />
-				<cfquery name="qlookup" datasource="#application.dsn#">
+				<cfquery name="qlookup" >
 				select usrid from usr where email = <cfqueryparam cfsqltype="cf_sql_varchar" value="#qmail.from#">
 				</cfquery>
 				<cfif qlookup.recordcount eq 1>
-					<cfquery name="qupdate" datasource="#application.dsn#">
+					<cfquery name="qupdate" >
 					update usr set onhold = onhold+1 where usrid = #qlookup.usrid#
 					</cfquery>
 				</cfif>
@@ -384,7 +384,7 @@
 			directory emptied<br>
 		</cfif>
 
-		<cfquery name="qget" datasource="#application.dsn#">
+		<cfquery name="qget" >
 		select noticequeue.*, usr.email from noticequeue inner join usr on usr.usrid = noticequeue.usr
 
 		where noticequeue.noticequeuestatus = 1 and usr.holdmail = 0
@@ -423,13 +423,13 @@
 						</cfmail>
 						<!--- mark this message as sent --->
 
-						<cfquery name="qupdate" datasource="#application.dsn#">
+						<cfquery name="qupdate" >
 						update noticequeue set noticequeuestatus=2 where noticequeueid = #qget.noticequeueid#
 						</cfquery>
 
 					<cfelse> <!--- file did not generate, form may have been deleted --->
 						<!--- cancelled --->
-						<cfquery name="qupdate" datasource="#application.dsn#">
+						<cfquery name="qupdate" >
 						update noticequeue set noticequeuestatus=3 where noticequeueid = #qget.noticequeueid#
 						</cfquery>
 
@@ -441,7 +441,7 @@
 					</cfmail>
 					<!--- mark this message as sent --->
 
-					<cfquery name="qupdate" datasource="#application.dsn#">
+					<cfquery name="qupdate" >
 					update noticequeue set noticequeuestatus=2 where noticequeueid = #qget.noticequeueid#
 					</cfquery>
 				</cfif>
