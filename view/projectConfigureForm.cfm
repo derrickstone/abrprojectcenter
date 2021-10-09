@@ -6,6 +6,8 @@
 	#oWriter.write(fieldType="textarea",stForm="#o#",fieldName="projectdescription")#
 	#oWriter.write(fieldType="selector",stForm="#o#",fieldName="projectsponsor",optiondata="usr")#
 
+	#oWriter.write(fieldType="checkbox",stForm="#o#",fieldName="keykeywordproject",optiondata="keyword")#
+
 	<div class="formcontrols">
 	<input type="submit" name="submit" value="Submit">
 	<input type="submit" name="cancel" value="Cancel">

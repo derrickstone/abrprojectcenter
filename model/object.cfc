@@ -138,7 +138,7 @@
 	</cfquery>
 	<cfreturn qget>
 </cffunction>
-<cffunction name="getKeyValues" output="false">
+<cffunction name="getKeyValues" output="true">
 	<cfargument name="pkfield" type="string">
 	<cfargument name="pkvalue" type="number">
 	<cfargument name="datatable" type="string">

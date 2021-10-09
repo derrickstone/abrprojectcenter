@@ -6,6 +6,8 @@
 	#oWriter.write(fieldType="textinput",stForm="#o#",fieldName="resourceauthor")#
 	#oWriter.write(fieldType="textinput",stForm="#o#",fieldName="resourceURL")#
 
+	#oWriter.write(fieldType="checkbox",fieldName="keykeywordresource",optiondata="keyword",stForm="#o#")#
+
 	<div class="formcontrols">
 	<input type="submit" name="submit" value="Submit">
 	<input type="submit" name="cancel" value="Cancel">
