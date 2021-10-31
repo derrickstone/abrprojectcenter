@@ -4,7 +4,6 @@
 	<cflocation url="index.cfm" addtoken="no">
 </cfif>
 
-<cfparam name="url.searchstring" default="">
 
 
 <cfinvoke component="control.flow" method="handleForm" returnvariable="sMessage"></cfinvoke>

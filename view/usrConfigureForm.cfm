@@ -5,24 +5,25 @@
 <form action="#cgi.script_name#" method="post">
 
 #oWriter.write(fieldType="textInput",stForm="#o#",fieldName="lastname")#
-<br />
+
 #oWriter.write(fieldType="textInput",stForm="#o#",fieldName="firstname")#
-<br />
+
 #oWriter.write(fieldType="textInput",stForm="#o#",fieldName="email")#
-<br />
+
 #oWriter.write(fieldType="textInput",stForm="#o#",fieldName="usrname")#
 
-<br />
+
 <cfif o.holdmail eq "">
 	<cfset o.holdmail = 0>
 </cfif>
 #oWriter.write(fieldtype="radio",optiondata="yesno",stForm="#o#",fieldname="holdmail",htmlid="hm")#
-<br />
+
 <cfif session.usr.accesslevel lte 2>
 #oWriter.write(fieldType="radio",stForm="#o#",fieldName="accessLevel",optionData="accesslevel",htmlid="al")#
-<br />
+
 #oWriter.write(fieldType="textInput",stForm="#o#",fieldName="password",htmlid="pw")#
-<br />
+
+#oWriter.write(fieldType="checkbox",fieldName="keykeywordusr",optiondata="keyword",stForm="#o#")#
 </cfif>
 <div class="formcontrols">
 	<input type="submit" name="submit" value="Submit">
@@ -31,6 +32,6 @@
 	<input type="hidden" name="type" value="usr">
 	<input type="hidden" name="action" value="configure">
 	</div>
-<h3>Relation to resources, projects, events</h3>
+
 </form>
 </cfoutput>

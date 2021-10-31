@@ -24,7 +24,9 @@
 	<cfset var qFormField = "">
 	<cfset var t = "">
 
-<cfset sReturn = '<label for="#arguments.htmlid##arguments.fieldName#">#getLabel(arguments.fieldName)#</label><input type="datetime-local" name="#arguments.fieldName#" id="#arguments.htmlid##arguments.fieldName#" value="#datetimeformat(arguments.value,"yyyy-mm-dd hh:nn tt")#" #drawReadonly(arguments.readonly)# #drawRequired(arguments.required)# placeholder="#arguments.placeholder#">'>
+	<cfset arguments.value = stForm[arguments.fieldName]>
+<!--- STUB: fix the time --->
+<cfset sReturn = '<label for="#arguments.htmlid##arguments.fieldName#">#getLabel(arguments.fieldName)#</label><input type="date" name="#arguments.fieldName#" id="#arguments.htmlid##arguments.fieldName#" value="#dateformat(arguments.value,"yyyy-mm-dd")#" #drawReadonly(arguments.readonly)# #drawRequired(arguments.required)# placeholder="#arguments.placeholder#">'>
 
 	<cfreturn sReturn>
 </cffunction>

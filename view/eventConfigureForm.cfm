@@ -9,6 +9,8 @@
 	#oWriter.write(fieldType="textinput",stForm="#o#",fieldName="eventURL")#
 	#oWriter.write(fieldType="radio",stForm="#o#",fieldName="eventstatus",optionData="eventstatus")#
 
+	#oWriter.write(fieldType="checkbox",fieldName="keykeywordevent",optiondata="keyword",stForm="#o#")#
+
 	<div class="formcontrols">
 	<input type="submit" name="submit" value="Submit">
 	<input type="submit" name="cancel" value="Cancel">

@@ -1,6 +1,6 @@
 <cfcomponent >
 	
-	<cffunction name="configureForm" output="false">
+	<cffunction name="configureForm" output="true">
 	<cfargument name="formdata">
 	<cfargument name="type" default="#this.type#">
 	<cfargument name="id">
@@ -58,7 +58,7 @@
 		</cfif>
 		
 		</cffunction>
-<cffunction name="drawItem" output="false">
+<cffunction name="drawItem" output="true">
 	<cfargument name="id">
 	<cfargument name="name">
 	<cfargument name="type" default="#this.type#">
