@@ -63,12 +63,16 @@
 
 	
 <h1>People</h1>
+
 	
 
-<cfinvoke component="#application.modelpath#.usr" method="getData" returnvariable="qUsr" ></cfinvoke>
+<cfinvoke component="#application.modelpath#.usr" method="getData" returnvariable="qUsr" searchstring="#url.searchstring#"></cfinvoke>
 
-
-<cfinvoke component="#application.modelpath#.usr" method="showEditingList" returnvariable="sEditList" qData="#qUsr#" ></cfinvoke>
+<cfset allowCreate = false>
+<cfif session.usr.accesslevel eq 1 and len(url.searchstring) eq 0>
+	<cfset allowCreate = true>
+</cfif>
+<cfinvoke component="#application.modelpath#.usr" method="showEditingList" returnvariable="sEditList" qData="#qUsr#" showcreateform="#allowCreate#" showSearchForm="true"></cfinvoke>
 <cfoutput>#sEditList#</cfoutput>
 
 

@@ -96,10 +96,14 @@
 <h1>Resources</h1>
 	
 
-<cfinvoke component="#application.modelpath#.resource" method="getData" returnvariable="qResource" ></cfinvoke>
+<cfinvoke component="#application.modelpath#.resource" method="getData" returnvariable="qResource" searchstring="#url.searchstring#"></cfinvoke>
 
 
-<cfinvoke component="#application.modelpath#.resource" method="showEditingList" returnvariable="sEditList" qData="#qResource#" ></cfinvoke>
+<cfset allowCreate = false>
+<cfif session.usr.accesslevel eq 1 and len(url.searchstring) eq 0>
+	<cfset allowCreate = true>
+</cfif>
+<cfinvoke component="#application.modelpath#.resource" method="showEditingList" returnvariable="sEditList" qData="#qResource#" showcreateform="#allowCreate#" showsearchform="true"></cfinvoke>
 <cfoutput>#sEditList#</cfoutput>
 
 

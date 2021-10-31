@@ -51,8 +51,11 @@
 
 
 <cfinvoke component="#application.modelpath#.set" method="getData" returnvariable="qSets"></cfinvoke>
-
-<cfinvoke component="#application.modelpath#.set" method="showEditingList" returnvariable="sEditSetList" qData="#qSets#"></cfinvoke>
+<cfset isAdmin = false>
+<cfif session.usr.accesslevel eq 1>
+	<cfset isAdmin = true>
+</cfif>
+<cfinvoke component="#application.modelpath#.set" method="showEditingList" returnvariable="sEditSetList" qData="#qSets#" showcreateform="#isAdmin#"></cfinvoke>
 <cfoutput>#sEditSetList#</cfoutput>
 
 

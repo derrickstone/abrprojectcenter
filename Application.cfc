@@ -59,6 +59,7 @@
 	<cfparam name="url.reset" default="0">
 	<cfparam name="url.debug" default="0">
 	<cfparam name="url.showtemplate" default="1">
+	<cfparam name="url.searchstring" default="">
 
 	<cfif url.reset eq 1>
 		<cfset onapplicationstart()>

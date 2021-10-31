@@ -16,7 +16,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<a href="index.cfm" class="logo">UVA SEAS Graduate Forms</a>
+						<a href="index.cfm" class="logo">Anti Black Racism Project Center</a>
 					</header> 
 					
 				<!-- Nav -->

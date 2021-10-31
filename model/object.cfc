@@ -1,4 +1,5 @@
 <cfcomponent >
+	
 	<cffunction name="configureForm" output="false">
 	<cfargument name="formdata">
 	<cfargument name="type" default="#this.type#">
@@ -117,8 +118,17 @@
 	<cfargument name="lAdditionalFields" default="">
 	<cfargument name="whereClause" default="">
 	<cfargument name="sortOrder" default="">
+	<cfargument name="searchstring" default="">
+	<cfargument name="searchfields" default="">
 
 	<cfset var qget = "">
+
+	<cfif len(arguments.searchfields) eq 0>
+		<cfif arguments.type neq "object" and structkeyexists(this,"searchfields")>
+			<cfset arguments.searchfields = this.searchfields>
+		</cfif>
+	</cfif>
+
 	<Cfquery name="qget" >
 		select #arguments.type#id, #arguments.type#id as id, #arguments.type#name, #arguments.type#name as name 
 		<cfif len(arguments.lAdditionalFields)>, #arguments.lAdditionalFields#</cfif>
@@ -129,6 +139,14 @@
 		</cfif>
 		<cfif len(arguments.whereClause)>
 			#preservesinglequotes(arguments.whereClause)#
+		</cfif>
+		<cfif len(arguments.searchstring)> <!--- STUB: make this safe from injection --->
+			and (
+			<cfloop list="#arguments.searchfields#" item="sf">
+			<cfif sf neq listfirst(arguments.searchfields)> OR </cfif>
+			 #sf# like '%#arguments.searchstring#%'
+			</cfloop>
+			)
 		</cfif>
 		<cfif len(arguments.sortOrder)>
 			order by #preservesinglequotes(arguments.sortOrder)#
@@ -255,7 +273,7 @@
 			</cftry> --->
 			<!--- handle key values - m:m relations --->
 			<cfloop collection="#arguments.formdata#" item="f">
-				<cfif left(f,3) eq "key">
+				<cfif left(f,3) eq "key" and left(f,7) neq "keyword">
 					<!--- get column names... maybe this should someday save a history --->
 					<cfquery name="qKeySave" >
 					select * from #f# where 0 =1
@@ -370,13 +388,36 @@
 		
 		<cfreturn aReturn>
 	</cffunction>
+<!---<cffunction name="searchTable">
+<cfargument name="searchString">
+<cfargument name="type">
+<cfargument name="lAdditionalFields" default="">
+
+<cfset var qget = "">
+
+<cfquery name="qget">
+select 
+#arguments.type#id, #arguments.type#id as id, #arguments.type#name, #arguments.type#name as name 
+		<cfif len(arguments.lAdditionalFields)>, #arguments.lAdditionalFields#</cfif>
+		 from #arguments.type# where #arguments.type#name like '%#arguments.searchstring#%'
+</cfquery>
+
+<cfreturn qget>
+</cffunction>	--->
 <cffunction name="showEditingList" output="true">
 	<cfargument name="qData">
 	<cfargument name="type" default="#this.type#">
 	<cfargument name="lAdditionalFields" default="">
 	<Cfargument name="maxitems" default="">
+	<cfargument name="showcreateform" default="false">
+	<cfargument name="showSearchForm" default="false">
 
 	<cfset var sRetval = '<div class="post">'>
+		<cfif arguments.showSearchForm eq true>
+			<cfset sRetval = sRetval & '<div><form name="sf" action="#cgi.SCRIPT_NAME#" method="get"><input type="text" name="searchstring"><input type="submit" name="submit" value="Search"><input type="submit" name="clear" value="Clear Search" onclick="document.sf.searchstring.value='''';"></form></div>'>
+
+		</cfif>
+		<cfif arguments.showcreateform eq true>
 		<cfif not isnumeric(arguments.maxitems) or ( (isnumeric(arguments.maxitems) and qdata.recordcount lt arguments.maxitems) )>
 			<cfif not isdefined("url.#arguments.type#id") or (isdefined("url.action") and url.action neq "edit")>
 				
@@ -385,11 +426,13 @@
 		<cfelse>
 			<cfset sRetval = sRetval & "<div>Maximum number of items reached (#arguments.maxitems#).</div>">
 		</cfif>
+	</cfif>
 	<cfloop query="qdata">
 		<cfif isdefined("url.#arguments.type#id") and url["#arguments.type#id"] eq qdata.id and isdefined("url.action") and url.action eq "edit">
 			<cfset sRetval = sRetval & drawItemForm(qdata.id,qdata.name,arguments.type)>
 		<cfelse>
-			<cfset sRetval = sRetval & '<article> #qdata.name# <a href="#cgi.SCRIPT_NAME#?#arguments.type#id=#qdata.id#&action=edit">[ Rename ]</a>'>
+			<cfset sRetval = sRetval & '<article> <a href="#cgi.SCRIPT_NAME#?type=#arguments.type#&#arguments.type#id=#qdata.id#&action=configure">#qdata.name#</a>'>
+				<!---' <a href="#cgi.SCRIPT_NAME#?#arguments.type#id=#qdata.id#&action=edit">[ Rename ]</a>'>--->
 			<cfif len(arguments.lAdditionalFields)>
 				<cfloop list="#arguments.lAdditionalFields#" index="item">
 					<cfset sRetval = sRetval & "&nbsp;" & evaluate("qData.#item#")>
@@ -397,8 +440,8 @@
 			</cfif>
 			<!--- STUB: add confirmations --->
 			<cfset sRetval = sRetval & '&nbsp;<a href="#cgi.SCRIPT_NAME#?type=#arguments.type#&#arguments.type#id=#qdata.id#&action=delete" onClick="javascript: return confirm(''delete this item?'')">[ Delete ]</a>'>
-			<cfset sRetval = sRetval & '&nbsp;<a href="#cgi.SCRIPT_NAME#?type=#arguments.type#&#arguments.type#id=#qdata.id#&action=configure">[ Configure ]</a>'>
-			
+			<!---<cfset sRetval = sRetval & '&nbsp;<a href="#cgi.SCRIPT_NAME#?type=#arguments.type#&#arguments.type#id=#qdata.id#&action=configure">[ Configure ]</a>'>
+			--->
 			<cfset sRetval = sRetval & '</article>'>
 		</cfif>
 	</cfloop>

@@ -3,6 +3,9 @@
 <cfif structkeyexists(session,"usr")>Logged in as <cfoutput>#session.usr.usrname#</cfoutput>
 	<a href="profile.cfm">[ My Profile ]</a>
 	<a href="/login/logout.cfm">[ Log out ]</a><br />
+	<cfif session.usr.accesslevel eq 1>
+	<a href="setup.cfm">Setup</a>
+</cfif>
 </cfif>
 </footer>
 		</div>

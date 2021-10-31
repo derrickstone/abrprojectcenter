@@ -43,6 +43,10 @@ STUB: add validation for entry fields --->
 	<div>
 		<input type="submit" name="submit" value="submit">
 	</div>
+	<br />
+	<div>
+		<div class="g-signin2" data-onsuccess="onSignIn"></div>
+	</div>
 </form>
 
 <a href="register.cfm">[ Register for an Account ]</a>
@@ -52,3 +56,12 @@ STUB: add validation for entry fields --->
 <cfif url.debug eq 1>
 	<cfdump var="#session#">
 </cfif>
+<script>
+	function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+}
+</script>

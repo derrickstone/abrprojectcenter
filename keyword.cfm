@@ -1,9 +1,36 @@
+<!--- keyword editor --->
 <!--- control access to the form --->
 <cfif session.usr.accesslevel gt 1>
 	<cflocation url="index.cfm" addtoken="no">
 </cfif>
 
+<cfparam name="url.searchstring" default="">
+
+
+<cfinvoke component="control.flow" method="handleForm" returnvariable="sMessage"></cfinvoke>
+
+<cfif len(sMessage)>
+	<cfoutput>
+	<p class="userfeedback">#sMessage#</p>
+	</cfoutput>
+</cfif>
+	
+<h1>Keyword</h1>
+	
+
+
+<cfinvoke component="#application.modelpath#.keyword" method="getData" returnvariable="qKeyword" searchstring="#url.searchString#"></cfinvoke>
+
+<cfset isAdmin = false>
+<cfif session.usr.accesslevel eq 1>
+	<cfset isAdmin = true>
+</cfif>
+<cfinvoke component="#application.modelpath#.keyword" method="showEditingList" returnvariable="sEditList" qData="#qKeyword#" showcreateform="#isAdmin#" showSearchForm="true"></cfinvoke>
+<cfoutput>#sEditList#</cfoutput>
+
+
 <!--- handle form submissions --->
+<!---
 <cfset sMessage = "">
 <cfif ( isdefined("form.action") and len(form.action) ) and (not isdefined("url.action") or len(url.action) eq 0) >
 	<cfset url.action = form.action>
@@ -16,8 +43,8 @@
 <cfif isdefined("url.action") and len(url.action) >
 	<cfif url.action eq "edit">
 		<cfif isdefined("form.type") and len(form.type)>
-			<cfif structkeyexists(form,"submit") and form.submit eq "save">
-				<cfif isdefined("form.#form.type#id") and isnumeric(form["#form.type#id"]) >
+			<cfif structkeyexists(form,"submit") and (form.submit eq "submit" or form.submit eq "Save")>
+				<cfif isdefined("form.#form.type#id") and isnumeric(form["#form.type#id"]) >	
 					<cfinvoke component="#application.modelpath#.object" method="handleEditForm" formdata="#form#" returnvariable="sMessage"></cfinvoke>	
 				</cfif>
 			<cfelse>
@@ -32,18 +59,14 @@
 	<cfelseif url.action eq "configure">
 		<cfif isdefined("url.type") and len(url.type)>
 			<cfif isdefined("form.submit") and form.submit eq "submit">
-
-				<cfif session.usr.accesslevel lte 2 and structkeyexists(form,"keyusroptiondata") eq false>
-					<cfset form.keyusroptiondata="">
-				</cfif>
-				<cfinvoke component="#application.modelpath#.#url.type#" method="handleEditForm" formdata="#form#" returnvariable="sMessage"></cfinvoke>
+					<cfinvoke component="#application.modelpath#.#url.type#" method="handleEditForm" formdata="#form#" returnvariable="sMessage"></cfinvoke>
 			</cfif>
 			<cfif isdefined("form.cancel")>
 				<cflocation url="#cgi.SCRIPT_NAME#" addtoken="no">
 			</cfif>
 			<cfinvoke component="#application.modelpath#.#url.type#" method="configureForm" id="#url["#url.type#id"]#" returnvariable="sConfigureForm" formdata="#form#"></cfinvoke>
 			<cfoutput>#sConfigureForm#</cfoutput>
-			<cfabort>
+			
 		</cfif>
 	</cfif>
 </cfif>			
@@ -54,15 +77,11 @@
 </cfif>
 
 
-<cfinvoke component="#application.modelpath#.usr" method="getData" returnvariable="qUsr"></cfinvoke>
+<cfinvoke component="#application.modelpath#.keyword" method="getData" returnvariable="qData"></cfinvoke>
 
-<cfset allowCreate = false>
-<cfif session.usr.accesslevel eq 1 and len(url.searchstring) eq 0>
-	<cfset allowCreate = true>
-</cfif>
-<cfinvoke component="#application.modelpath#.usr" method="showEditingList" returnvariable="sEditUsrList" qData="#qUsr#" showcreateform="#allowCreate#" showSearchForm="true"></cfinvoke>
-<cfoutput>#sEditUsrList#</cfoutput>
-
+<cfinvoke component="#application.modelpath#.keyword" method="showEditingList" returnvariable="sEditSetList" qData="#qData#"></cfinvoke>
+<cfoutput>#sEditSetList#</cfoutput>
+--->
 
 <br />
 <a href="setup.cfm">[ Return ]</a>

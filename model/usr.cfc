@@ -1,5 +1,6 @@
 <cfcomponent extends="object">
 <cfset this.type="usr">
+<cfset this.searchfields="usrname,firstname,lastname">
 <cffunction name="getMyForms" hint="Get a list of forms submitted by this user." output="false">
 
 	<cfargument name="usr">

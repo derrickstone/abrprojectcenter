@@ -12,5 +12,10 @@
 <cfinvoke component="#application.modelpath#.event" method="getData" returnvariable="qEvent" ></cfinvoke>
 
 
-<cfinvoke component="#application.modelpath#.event" method="showEditingList" returnvariable="sEditList" qData="#qEvent#" ></cfinvoke>
+
+<cfset allowCreate = false>
+<cfif session.usr.accesslevel eq 1 and len(url.searchstring) eq 0>
+	<cfset allowCreate = true>
+</cfif>
+<cfinvoke component="#application.modelpath#.event" method="showEditingList" returnvariable="sEditList" qData="#qEvent#" showcreateform="#allowCreate#" showSearchForm="true"></cfinvoke>
 <cfoutput>#sEditList#</cfoutput>

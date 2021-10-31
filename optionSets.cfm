@@ -2,7 +2,7 @@
 <cfif session.usr.accesslevel gt 1>
 	<cflocation url="index.cfm" addtoken="no">
 </cfif>
-
+This feature is disabled.<cfabort>
 <!--- handle form submissions --->
 <cfset sMessage = "">
 <cfif ( isdefined("form.action") and len(form.action) ) and (not isdefined("url.action") or len(url.action) eq 0) >
@@ -51,8 +51,11 @@
 
 
 <cfinvoke component="#application.modelpath#.optionset" method="getData" returnvariable="qSets"></cfinvoke>
-
-<cfinvoke component="#application.modelpath#.optionset" method="showEditingList" returnvariable="sEditSetList" qData="#qSets#"></cfinvoke>
+<cfset isAdmin = false>
+<cfif session.usr.accesslevel eq 1>
+	<cfset isAdmin = true>
+</cfif>
+<cfinvoke component="#application.modelpath#.optionset" method="showEditingList" returnvariable="sEditSetList" qData="#qSets#" showcreateform="#isAdmin#"></cfinvoke>
 <cfoutput>#sEditSetList#</cfoutput>
 
 
