@@ -33,9 +33,11 @@
 		<cfif isdefined("url.type") and len(url.type)>
 			<cfif isdefined("form.submit") and form.submit eq "submit">
 
+				<!---
+				not currently using dynamic forms
 				<cfif session.usr.accesslevel lte 2 and structkeyexists(form,"keyusroptiondata") eq false>
 					<cfset form.keyusroptiondata="">
-				</cfif>
+				</cfif>--->
 				<cfinvoke component="#application.modelpath#.#url.type#" method="handleEditForm" formdata="#form#" returnvariable="sMessage"></cfinvoke>
 			</cfif>
 			<cfif isdefined("form.cancel")>
