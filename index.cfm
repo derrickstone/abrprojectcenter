@@ -1,4 +1,4 @@
-<cfparam name="url.type" default="resources">
+<cfparam name="url.type" default="resource">
 <cfparam name="url.keyword" default="">
 
 <cfoutput>
