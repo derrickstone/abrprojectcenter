@@ -26,7 +26,7 @@
 
 <cfif structkeyexists(url,"submit") and url.submit eq "Search">
 
-<cfinvoke component="#application.modelpath#.search" method="search" options="#url#" returnvariable="qResults"></cfinvoke>
+<cfinvoke component="#application.modelpath#.search" method="search" options="#url#" returnvariable="qResults"></cfinvoke><cfdump var="#qresults#">
 <ul>
 	<cfif qResults.recordcount gt 0>
 	<cfloop query="qResults">

@@ -18,7 +18,7 @@
 		<cfif structkeyexists(arguments.options,"type") and len(arguments.options.type)>
 			<cfloop list="#arguments.options.type#" item="t">
 				<cfquery name="qGet">
-					select #t#id as id, #t#name as name from #t# 
+					select #t#id as id, #t#name as name, '#t#' as type from #t# 
 					<cfif structkeyexists(arguments.options,"keyword") and len(arguments.options.keyword)>
 					inner join keykeyword#t# on keykeyword#t#id = #t#
 					</cfif>
@@ -34,9 +34,9 @@
 				<cfif qget.recordcount gt 0>
 					<cfloop query="qget">
 						<cfset queryAddRow(qBuild,1)>
-						<cfset qbuild.id=qget.id>
-						<cfset qbuild.name=qget.name>
-						<cfset qbuild.type=t>
+						<cfset querysetcell(qbuild,"id",qget.id)>
+						<cfset querysetcell(qbuild,"name",qget.name)>
+						<cfset querysetcell(qbuild,"type",qget.type)>
 					</cfloop>
 				</cfif>
 			</cfloop>
