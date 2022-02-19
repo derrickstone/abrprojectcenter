@@ -12,7 +12,7 @@
 	<cfargument name="readonly" default="false">
 	<cfargument name="required" default="false">
 	<cfargument name="placeholder" default="">
-	<cfargument name="htmlid" default="#arguments.fieldName#">
+	<cfargument name="htmlid" default="">
 	<cfargument name="abbrcolumn" default="">
 	<cfargument name="targetcolumn" default="s">
 	<cfargument name="stResponse" default="">
@@ -29,6 +29,11 @@
 	<cfif arguments.value eq "" and arguments.defaultvalue neq "">
 		<Cfset arguments.value = arguments.defaultvalue>
 	</Cfif>
+
+	<!--- setting a default on the htmlid to keep each set of radio buttons from having the same ID --->
+	<cfif arguments.htmlid eq "">
+		<cfset arguments.htmlid=arguments.fieldName>
+	</cfif>
 
 	<cfif isQuery(arguments.optionData)>
 			<!--- if a query is supplied, just use it --->
