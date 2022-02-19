@@ -12,7 +12,7 @@
 	<cfargument name="readonly" default="false">
 	<cfargument name="required" default="false">
 	<cfargument name="placeholder" default="">
-	<cfargument name="htmlid" default="">
+	<cfargument name="htmlid" default="#arguments.fieldName#">
 	<cfargument name="abbrcolumn" default="">
 	<cfargument name="targetcolumn" default="s">
 	<cfargument name="stResponse" default="">

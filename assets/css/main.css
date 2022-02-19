@@ -4664,3 +4664,4 @@ input[type="submit"].forward { color:green; border-color:green; }
 input[type="submit"].backward { color:red; border-color:red; }
 input.adhoc { width:48%; }
 a.reviewbutton { background: #708238; color:#98fb98; font-size:125%;}
+form div { margin-bottom: 1rem; }
