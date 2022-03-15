@@ -2,6 +2,13 @@
 
 <!--- handle form submissions --->
 <cfset sMessage = "">
+<cfif structkeyexists(url,"feedback")>
+	<cfswitch expression="#url.feedback#">
+		<cfcase value="1">
+			<Cfset sMessage="Saved.">
+		</cfcase>
+	</cfswitch>
+</cfif>
 <cfif ( isdefined("form.action") and len(form.action) ) and (not isdefined("url.action") or len(url.action) eq 0) >
 	<cfset url.action = form.action>
 </cfif>	
@@ -35,6 +42,8 @@
 					<cfset form.targetcolumn = tc>
 				</cfif> 
 				<cfinvoke component="#application.modelpath#.#url.type#" method="handleEditForm" formdata="#form#" returnvariable="sMessage"></cfinvoke>
+				<!--- item has been saved, return them to the list view --->
+				<cflocation url="#cgi.SCRIPT_NAME#?feedback=1" addtoken="no">
 			<cfelseif isdefined("form.submit") and form.submit eq "Delete">
 				
 				<cfinvoke component="#application.modelpath#.#form.type#" method="delete" formdata="#form#" returnvariable="sMessage" id="#form['#form.type#id']#"></cfinvoke>
@@ -61,9 +70,9 @@
 </cfif>
 <!--- END handle form submissions --->
 
-	
+	<!---
 <h1>People</h1>
-
+--->
 	
 
 <cfinvoke component="#application.modelpath#.usr" method="getData" returnvariable="qUsr" searchstring="#url.searchstring#"></cfinvoke>
@@ -72,7 +81,11 @@
 <cfif session.usr.accesslevel eq 1 and len(url.searchstring) eq 0>
 	<cfset allowCreate = true>
 </cfif>
-<cfinvoke component="#application.modelpath#.usr" method="showEditingList" returnvariable="sEditList" qData="#qUsr#" showcreateform="#allowCreate#" showSearchForm="true"></cfinvoke>
+<cfset visibleSearch=true>
+<cfif structkeyexists(url,"create") and url.create eq true>
+	<cfset visibleSearch=false>
+</cfif>
+<cfinvoke component="#application.modelpath#.usr" method="showEditingList" returnvariable="sEditList" qData="#qUsr#" showcreateform="#allowCreate#" showSearchForm="#visiblesearch#"></cfinvoke>
 <cfoutput>#sEditList#</cfoutput>
 
 

@@ -1,5 +1,5 @@
 <cfcomponent extends="formcontrol">
-<cffunction name="draw">
+<cffunction name="draw" output="true">
 	<cfargument name="fieldType">
 	<cfargument name="fieldName">
 	<cfargument name="fieldLabel" default="">
@@ -24,6 +24,12 @@
 	<cfset var qFormField = "">
 	<cfset var t = "">
 
+
+
+	<!--- fix for htmlid --->
+	<cfif arguments.htmlid eq "">
+		<cfset arguments.htmlid = arguments.fieldName>
+	</cfif>
 
 	<!--- set the current value of this item --->
 	<cfif len(arguments.value) eq 0>

@@ -15,7 +15,8 @@
 		<cfif isdefined("form.type") and len(form.type)>
 			<cfif structkeyexists(form,"submit") and ( form.submit eq "submit" or form.submit eq "Save")>
 				<cfif isdefined("form.#form.type#id") and isnumeric(form["#form.type#id"]) >	
-					<cfinvoke component="#application.modelpath#.object" method="handleEditForm" formdata="#form#" returnvariable="sMessage"></cfinvoke>	
+					<cfinvoke component="#application.modelpath#.object" method="handleEditForm" formdata="#form#" returnvariable="newid" returnnewid="true"></cfinvoke>	
+					<cflocation url="#cgi.script_name#?action=configure&#form.type#id=#newid#&type=#form.type#" addtoken="no">
 				</cfif>
 			<cfelse>
 				<cflocation url="#cgi.SCRIPT_NAME#" addtoken="no">

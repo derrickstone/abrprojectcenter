@@ -1,4 +1,4 @@
-<cfparam name="url.type" default="resource">
+<cfparam name="url.type" default="">
 <cfparam name="url.keyword" default="">
 
 <cfoutput>
@@ -7,15 +7,21 @@
 <!--- search by type, keyword and text search --->
 
 <div>
-	<cfset lTypes="resource,project,event,usr">
+	<cfset lTypes="resource,project,event">
+	<!--- if no types are selected, select all --->
+	<cfif url.type eq "">
+		<cfset url.type=lTypes>
+	</cfif>
 	<cfloop list="#lTypes#" item="t">
 		<input type="checkbox" name="type" value="#t#" <cfif listfindnocase(url.type,t)>checked</cfif> id="type#t#"><label for="type#t#">#t#</label>
 	</cfloop>
+	 <input type="checkbox" name="type" value="usr" <cfif listfindnocase(url.type,"usr")>checked</cfif> id="typeusr"><label for="typeusr">People</label>
 </div>
 <div>
 	<cfinvoke component="#application.modelpath#.keyword" method="getData" returnvariable="qKeywords"></cfinvoke>
+	<!---  --->
 	<cfloop query="qKeywords">
-		<input type="checkbox" name="keyword" value="#qKeywords.keywordid#" <cfif listfindnocase(url.keyword,qkeywords.keywordid)>checked</cfif> id="keyword#qKeywords.keywordname#"><label for="keyword#qKeywords.keywordname#">#qKeywords.keywordname#</label>
+		<input type="checkbox" name="keyword" value="#qKeywords.keywordid#" <cfif listfindnocase(url.keyword,qkeywords.keywordid)> checked</cfif> id="keyword#qKeywords.keywordname#"><label for="keyword#qKeywords.keywordname#">#qKeywords.keywordname#</label>
 	</cfloop>
 </div>
 

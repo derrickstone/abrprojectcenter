@@ -28,7 +28,7 @@
 					and #t#name like '%#arguments.options.searchstring#%'
 					</cfif>
 					<cfif structkeyexists(arguments.options,"keyword") and len(arguments.options.keyword)>
-					and keykeyword#t#.keywordid in  ( #arguments.options.keyword# )
+					and keykeyword#t#.keyword in  ( #arguments.options.keyword# )
 					</cfif>
 				</cfquery>	
 				<cfif qget.recordcount gt 0>

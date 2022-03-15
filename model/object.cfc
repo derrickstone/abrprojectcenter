@@ -291,7 +291,7 @@
 						</cfquery>
 						<cfloop list="#arguments.formdata[f]#" index="i">
 							<cfquery name="qKeySave" >
-							insert into #f# ( #arguments.formdata.type#, #targetColumn# ) values ( #pkvalue#, #i# )
+							insert into #f# ( #arguments.formdata.type#, #targetColumn#, creator ) values ( #pkvalue#, #i#, #session.usr.usrid# )
 							</cfquery>
 						</cfloop>
 					</cfif>
@@ -306,6 +306,7 @@
 		<cfreturn returnkey>
 	<cfelseif recordInserted neq 0>
 		<!--- if they have just created this, they will want to edit it. Send them to the edit form.--->
+		<!--- it is sloppy to have control logic in here --->
 		<cflocation url="#cgi.SCRIPT_NAME#?type=#form.type#&action=configure&#form.type#id=#recordInserted#" addtoken="no">
 	<cfelse>
 		<cfreturn "Saved.">

@@ -103,7 +103,11 @@
 <cfif session.usr.accesslevel eq 1 and len(url.searchstring) eq 0>
 	<cfset allowCreate = true>
 </cfif>
-<cfinvoke component="#application.modelpath#.resource" method="showEditingList" returnvariable="sEditList" qData="#qResource#" showcreateform="#allowCreate#" showsearchform="true"></cfinvoke>
+<cfset visibleSearch=true>
+<cfif structkeyexists(url,"create") and url.create eq true>
+	<cfset visibleSearch=false>
+</cfif>
+<cfinvoke component="#application.modelpath#.resource" method="showEditingList" returnvariable="sEditList" qData="#qResource#" showcreateform="#allowCreate#" showsearchform="#visibleSearch#"></cfinvoke>
 <cfoutput>#sEditList#</cfoutput>
 
 
