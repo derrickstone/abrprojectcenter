@@ -1,10 +1,11 @@
 <cfset oWriter = createObject("component", application.modelpath&".form")>
 <cfoutput>
-<form action="#cgi.script_name#" method="post">
+<form action="#cgi.script_name#" method="post" enctype="multipart/form-data">
 	#oWriter.write(fieldType="radio",stForm="#o#",fieldName="resourcetype",optionData="resourceType")#
 	#oWriter.write(fieldType="textinput",stForm="#o#",fieldName="resourcename")#
 	#oWriter.write(fieldType="textinput",stForm="#o#",fieldName="resourceauthor")#
 	#oWriter.write(fieldType="textinput",stForm="#o#",fieldName="resourceURL")#
+	#oWriter.write(fieldType="filefield",stForm="#o#",fieldName="fileresource")#
 
 	#oWriter.write(fieldType="checkbox",fieldName="keykeywordresource",optiondata="keyword",stForm="#o#")#
 

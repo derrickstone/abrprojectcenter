@@ -295,6 +295,36 @@
 							</cfquery>
 						</cfloop>
 					</cfif>
+				<cfelseif left(f,4) eq "file">
+					<!--- add a file attachment --->
+					<cfif  true> <!--- save this for some data validation --->
+						<!--- save the file --->
+						<cfset destinationDirectory = application.rootpath & "/" & application.filestoragepath & "/" & arguments.formdata.type & "/" & pkvalue>
+						<cfif directoryexists(destinationDirectory) eq "no">
+							<cflock scope="application" timeout="10" type="exclusive">
+								<cfdirectory action="create" directory="#destinationDirectory#">
+							</cflock>
+						</cfif>
+						<cflock scope="application" timeout="10" type="exclusive">
+							<cffile action="upload" result="stFile" filefield="#f#" destination="#destinationdirectory#" nameconflict="overwrite">
+						</cflock>
+
+						<cfquery name="qcheckfile">
+						select * from fileattachment where filepath='#stFile.serverfile#'
+						and type='#arguments.formdata.type#' and foreignkey=#pkvalue#
+						</cfquery>
+						<cfif qcheckfile.recordcount eq 0>
+							<cfquery name="qaddfile">
+							insert into fileattachment (filepath, creator, originalfilename, type, foreignkey, fieldname)  
+							values
+							( '#stFile.serverFile#', #session.usr.usrid#, '#stFile.clientFile#', '#arguments.formdata.type#', #pkvalue#,'#f#')
+							</cfquery>
+						</cfif>
+
+
+
+					</cfif>
+
 				</cfif>
 				
 			</cfloop>
@@ -413,9 +443,9 @@ select
 	<cfargument name="showcreateform" default="false">
 	<cfargument name="showSearchForm" default="false">
 
-	<cfset var sRetval = '<div class="post">'>
+	<cfset var sRetval = '<div >'>
 		<cfif arguments.showSearchForm eq true>
-			<cfset sRetval = sRetval & '<div><form name="sf" action="#cgi.SCRIPT_NAME#" method="get"><input type="text" name="searchstring"><input type="submit" name="submit" value="Search"><input type="submit" name="clear" value="Clear Search" onclick="document.sf.searchstring.value='''';"></form></div>'>
+			<cfset sRetval = sRetval & '<form name="sf" action="#cgi.SCRIPT_NAME#" method="get"><input type="text" name="searchstring"><input type="submit" name="submit" value="Search"><input type="submit" name="clear" value="Clear Search" onclick="document.sf.searchstring.value='''';"></form>'>
 
 		</cfif>
 		<cfif arguments.showcreateform eq true>
@@ -432,7 +462,7 @@ select
 		<cfif isdefined("url.#arguments.type#id") and url["#arguments.type#id"] eq qdata.id and isdefined("url.action") and url.action eq "edit">
 			<cfset sRetval = sRetval & drawItemForm(qdata.id,qdata.name,arguments.type)>
 		<cfelse>
-			<cfset sRetval = sRetval & '<article> <a href="#cgi.SCRIPT_NAME#?type=#arguments.type#&#arguments.type#id=#qdata.id#&action=configure">#qdata.name#</a>'>
+			<cfset sRetval = sRetval & ' <a href="#cgi.SCRIPT_NAME#?type=#arguments.type#&#arguments.type#id=#qdata.id#&action=configure">#qdata.name#</a>'>
 				<!---' <a href="#cgi.SCRIPT_NAME#?#arguments.type#id=#qdata.id#&action=edit">[ Rename ]</a>'>--->
 			<cfif len(arguments.lAdditionalFields)>
 				<cfloop list="#arguments.lAdditionalFields#" index="item">
@@ -443,7 +473,7 @@ select
 			<cfset sRetval = sRetval & '&nbsp;<a href="#cgi.SCRIPT_NAME#?type=#arguments.type#&#arguments.type#id=#qdata.id#&action=delete" onClick="javascript: return confirm(''delete this item?'')">[ Delete ]</a>'>
 			<!---<cfset sRetval = sRetval & '&nbsp;<a href="#cgi.SCRIPT_NAME#?type=#arguments.type#&#arguments.type#id=#qdata.id#&action=configure">[ Configure ]</a>'>
 			--->
-			<cfset sRetval = sRetval & '</article>'>
+			<!---<cfset sRetval = sRetval & '</article>'>--->
 		</cfif>
 	</cfloop>
 	<cfset sRetval = sRetval & "</div>">

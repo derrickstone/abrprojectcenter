@@ -28,7 +28,7 @@
 
 
 	<cflock scope="application" timeout="10" type="exclusive">
-		<cfset application.rootpath = "/var/www/html/">
+		<cfset application.rootpath = "/opt/lucee/tomcat/webapps/ROOT/">
 		<cfset application.viewpath="view">
 		<Cfset application.modelpath="model">
 		

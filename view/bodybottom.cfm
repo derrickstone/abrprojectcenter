@@ -1,5 +1,5 @@
 <footer>
-	&copy; 2021 ABR Task Force
+	&copy; 2022 ABR Task Force
 <cfif structkeyexists(session,"usr")>Logged in as <cfoutput>#session.usr.usrname#</cfoutput>
 	<a href="profile.cfm">[ My Profile ]</a>
 	<a href="/login/logout.cfm">[ Log out ]</a><br />

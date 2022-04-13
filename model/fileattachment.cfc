@@ -12,6 +12,23 @@
 	<!---<cfdump var="#qget#">--->
 	<cfreturn qget>
 </cffunction>
+<cffunction name="getFilesForObject" output="true">
+	<cfargument name="type">
+	<cfargument name="pkid">
+	<cfargument name="fieldName">
+
+	<cfset var qget = "">
+
+	<cfquery name="qget">
+	select fileattachmentid, filepath, originalfilename from fileattachment where
+	type = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.type#">
+	and foreignkey = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.pkid#">
+	and fieldname = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fieldName#">
+	</cfquery>
+	
+
+	<cfreturn qget>
+	</cffunction>
 <cffunction name="gettargetpath">
 	<cfargument name="formfield">
 	<cfargument name="responseset">

@@ -93,7 +93,7 @@
 <!--- END handle form submissions --->
 
 	
-<h1>Resources</h1>
+<!---<h1>Resources</h1>--->
 	
 
 <cfinvoke component="#application.modelpath#.resource" method="getData" returnvariable="qResource" searchstring="#url.searchstring#"></cfinvoke>

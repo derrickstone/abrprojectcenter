@@ -6,7 +6,7 @@
 	</cfoutput>
 </cfif>
 	
-<h1>Events</h1>
+<!---<h1>Events</h1>--->
 	
 
 <cfinvoke component="#application.modelpath#.event" method="getData" returnvariable="qEvent" ></cfinvoke>
